@@ -1,0 +1,27 @@
+import cv2
+from cvzone.HandTrackingModule import HandDetector
+
+detection = HandDetector(detectionCon=0.8, maxHands=2)
+
+cap = cv2.VideoCapture(0)
+
+while True:
+    success, img = cap.read()
+    hands, img = detection.findHands(img)
+    #hands = detection.findHands(img, draw= False)  ----> if you do not want graphics over your hands.
+
+    # Flip the image horizontally to create a mirror effect, only use if your camera is inverted by default.
+    mirrored_img = cv2.flip(img, 1)
+
+    # Display the mirrored image
+    cv2.imshow(" Image", mirrored_img)
+
+
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
+
+
