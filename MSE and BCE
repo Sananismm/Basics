@@ -1,0 +1,75 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def sigmoid(x):
+    """Compute the sigmoid function."""
+    return 1 / (1 + np.exp(-x))
+
+def d_sigmoid(x):
+    """Compute the derivative of the sigmoid function."""
+    s = sigmoid(x)
+    return s * (1 - s)
+
+def relu(x):
+    """Compute the ReLU function."""
+    return np.maximum(0, x)
+
+def d_relu(x):
+    """Compute the derivative of the ReLU function."""
+    return np.where(x > 0, 1, 0)
+
+def leaky_relu(x, alpha =0.01):
+    """Compute the Leaky ReLU function."""
+    return np.where(x > 0, x, alpha * x)
+
+
+mse = lambda y_hat, y: ((y_hat - y) ** 2)
+bce = lambda y_hat, y: -(y * np.log(y_hat) + (1-y)*np.log(1 - y_hat))
+
+y_hat = np.array([1, 0.85, 0.75, 0.65])
+y = np.array([1, 1, 0, 0])
+
+print ("Mean Squared Error:", mse(y_hat, y))
+print ("Binary Cross Entropy:", bce(y_hat, y))
+
+# Plotting the mse and bce functions
+# Lets fix the value of y, and change the value of y_hat
+
+y_hat_val = np.linspace(0.01, 0.99, 100)
+
+#to create a range of y values with the same shape as y_hat_val
+
+y_val_ones = np.ones_like(y_hat_val)
+y_val_zeros = np.zeros_like(y_hat_val)
+
+# The mse for when y = 1
+mse_ones = mse(y_hat_val, y_val_ones)
+# The mse for when y = 0    
+mse_zeros = mse(y_hat_val, y_val_zeros)
+
+# The bce for when y = 1
+bce_ones = bce(y_hat_val, y_val_ones)
+# The bce for when y = 0
+bce_zeros = bce(y_hat_val, y_val_zeros)
+
+plt.figure(figsize=(12, 8))
+
+x = np.linspace(-10, 10, 100)
+
+#plot mse
+plt.plot(y_hat_val, mse_ones, label='MSE when y=1', color='blue')
+plt.plot(y_hat_val, mse_zeros, label='MSE when y=0', color='orange')
+
+#plot bce
+plt.plot(y_hat_val, bce_ones, label='BCE when y=1', color='green')
+plt.plot(y_hat_val, bce_zeros, label='BCE when y=0', color='red')
+
+plt.title('Mean Squared Error and Binary Cross Entropy')
+plt.xlabel('Predicted Value (y_hat)')
+plt.ylabel('Loss Value')
+plt.grid(True)
+plt.legend()
+plt.show()
+
+
+
